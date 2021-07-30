@@ -16,6 +16,7 @@ extern keymap_config_t keymap_config;
 #define RAISE_K LT(_RAISE,KC_K)
 #define ALTL LM(_ALT, MOD_LALT)
 #define DEV MO(_DEV)
+
 #define PRINT_SCREEN LGUI(KC_PSCREEN)
 #define CTL_ESC LCTL_T(KC_ESC)
 
@@ -33,9 +34,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_RAISE] = LAYOUT_5x6(
      KC_F12 , KC_F1 , KC_F2 , KC_F3 , KC_F4 , KC_F5 ,                         KC_F6  , KC_F7 , KC_F8 , KC_F9 ,KC_F10 ,KC_F11 ,
      _______,_______,KC_HOME,KC_UP,KC_END,KC_PGUP,                         _______,_______,_______,_______,_______,_______,
-		_______,_______,KC_LEFT,KC_DOWN,KC_RGHT,KC_PGDN,                         KC_INS,KC_BSPC,KC_ENT,_______,_______,_______,
+		_______,_______,KC_LEFT,KC_DOWN,KC_RGHT,KC_PGDN,                         KC_TAB,KC_BSPC,KC_ENT,_______,_______,_______,
      RESET,_______,_______,_______,_______,_______,                         _______,_______,_______,_______,_______,_______,
-																		_______,_______,                         KC_TAB,A(S(KC_TAB)),
+																		_______,_______,                         KC_INS,_______,
                                      _______,_______,                         _______,_______,
                                      _______,_______,                         _______,_______,
                                      _______,_______,                         _______,_______
