@@ -20,6 +20,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define USE_SERIAL
 
 #define MASTER_LEFT
+
+//#define RETRO_TAPPING
+//#define PERMISSIVE_HOLD
+#define TAPPING_TERM 300
 //#define MASTER_RIGHT
 //#define EE_HANDS
 // Rows are doubled-up
