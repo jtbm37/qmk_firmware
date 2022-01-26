@@ -12,35 +12,48 @@ extern keymap_config_t keymap_config;
 #define _DEV 4
 #define _GAMING1 5
 #define _GAMING2 6
-#define _MOUSE 7
+#define _GAMING3 7
+#define _MOUSE 8
 
 #define OSX MO(_OSX)
 #define DEV MO(_DEV)
 #define DVK DF(_DVORAK)
-#define GIG DF(_GAMING1)
-#define GIG2 MO(_GAMING2)
 #define SHIFTED MO(_SHIFTED)
 #define MOUSE_L MO(_MOUSE)
 
-#define RAISE_E LT(_RAISE,KC_E)
-#define RAISE_T LT(_RAISE,KC_T)
+#define GIG DF(_GAMING1)
+#define GIG2 MO(_GAMING2)
+#define GIG3_SPC LT(_GAMING3,KC_SPC)
+
+/* #define RAISE_E LT(_RAISE,KC_E) */
+/* #define RAISE_T LT(_RAISE,KC_T) */
+
+#define GUI_COMM LGUI_T(KC_COMM)
 #define RAISE_SPC LT(_RAISE,KC_SPC)
 
 #define PRINT_SCREEN LGUI(KC_PSCREEN)
 #define CTL_ESC LCTL_T(KC_ESC)
 #define ALT_BSPC LALT_T(KC_BSPC)
+/* #define COMBO_COUNT 0 */
+
+// Combo
+/* const uint16_t PROGMEM h_t_combo[] = {KC_H, KC_T, COMBO_END}; */
+/* combo_t key_combos[COMBO_COUNT] = { */
+/* 		COMBO(h_t_combo, KC_ESC) */
+/*     //COMBO(test_combo2, LCTL(KC_Z)), // keycodes with modifiers are possible too! */
+/* }; */
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_DVORAK] = LAYOUT_5x6(
 												 /*KC_DLR , KC_1  , KC_2  , KC_3  , KC_4  , KC_5  ,                         KC_6  , KC_7  , KC_8  , KC_9  , KC_0  ,KC_EXLM,*/ 
 		KC_DLR, KC_PLUS  , KC_LBRC  , KC_LCBR  , KC_LPRN  , KC_AMPR  ,             KC_EQL  , KC_RPRN  , KC_RCBR  , KC_RBRC  , KC_ASTR  ,KC_EXLM,
-		KC_TAB , KC_SCLN  , KC_COMM  , KC_DOT  , KC_P  , KC_Y  ,                  KC_F  , KC_G  , KC_C  , KC_R  , KC_L  ,KC_SLASH,
-    KC_LSFT, KC_A  , KC_O  , RAISE_E  , KC_U  , KC_I  ,                         KC_D  , KC_H  , KC_T  , KC_N  ,KC_S, KC_MINS,
+		KC_TAB , KC_SCLN  , GUI_COMM  , KC_DOT  , KC_P  , KC_Y  ,                  KC_F  , KC_G  , KC_C  , KC_R  , KC_L  ,KC_SLASH,
+    KC_LSFT, KC_A  , KC_O  , KC_E  , KC_U  , KC_I  ,                         KC_D  , KC_H  , KC_T  , KC_N  ,KC_S, KC_MINS,
     DEV, KC_QUOTE  , KC_Q  , KC_J  , KC_K  , KC_X  ,                         KC_B  , KC_M  ,KC_W,KC_V ,KC_Z,KC_DEL,
 														KC_NUBS,KC_GRV,                                                       KC_NUHS, S(KC_QUOT),
 																				ALT_BSPC,RAISE_SPC,                        SHIFTED, XXXXXXX,
-																				PRINT_SCREEN,/*OSX*/CTL_ESC,                   XXXXXXX, RAISE_SPC,  
-																				KC_TAB, MOUSE_L,                         KC_LGUI,XXXXXXX
+																				MOUSE_L,/*OSX*/CTL_ESC,                   XXXXXXX, KC_END,  
+																				KC_TAB, KC_ESC,                         KC_LGUI,KC_HOME
   ),
   [_SHIFTED] = LAYOUT_5x6(
 		S(KC_NUHS) , KC_1  , KC_2  , KC_3  , KC_4  , KC_5  ,                         KC_6  , KC_7  , KC_8  , KC_9  , KC_0  ,KC_PERC,
@@ -54,7 +67,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 ),
   [_RAISE] = LAYOUT_5x6(
      KC_F12 , KC_F1 , KC_F2 , KC_F3 , KC_F4 , KC_F5 ,                         KC_F6  , KC_F7 , KC_F8 , KC_F9 ,KC_F10 ,KC_F11 ,
-     XXXXXXX,XXXXXXX,KC_HOME,KC_UP,KC_END,XXXXXXX,                         XXXXXXX,XXXXXXX,KC_BSPC,XXXXXXX,XXXXXXX,XXXXXXX,
+     XXXXXXX,XXXXXXX,KC_HOME,KC_UP,KC_END,XXXXXXX,                         PRINT_SCREEN,XXXXXXX,KC_BSPC,XXXXXXX,XXXXXXX,XXXXXXX,
 		XXXXXXX,XXXXXXX,KC_LEFT,KC_DOWN,KC_RGHT,XXXXXXX,                         KC_TAB,XXXXXXX,KC_ENT,XXXXXXX,XXXXXXX,XXXXXXX,
      RESET,XXXXXXX,KC_PGUP,KC_ENT,KC_PGDN,XXXXXXX,                         XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,
 																		_______,_______,                         KC_INS,_______,
@@ -64,9 +77,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
   [_MOUSE] = LAYOUT_5x6(
      _______,_______,_______,_______,_______,_______,                         _______,_______,_______,_______,_______,_______,
-     _______,_______,_______,KC_WH_U,KC_WH_D,_______,                         _______,_______,_______,_______,_______,_______,
-     _______,_______,_______,KC_BTN3,KC_BTN1,KC_BTN2,                         _______,_______,_______,_______,_______,_______,
-     _______,_______,_______,_______,_______,_______,                         _______,_______,_______,_______,_______,_______,
+     _______,_______,_______,KC_WH_U,KC_BTN3,_______,                         _______,KC_BTN4,KC_BTN5,_______,_______,_______,
+     _______,_______,_______,KC_WH_D,KC_BTN1,KC_BTN2,                         _______,C(KC_PGUP),C(KC_PGDN),_______,_______,_______,
+     _______,_______,_______,KC_WH_L,KC_WH_R,_______,                         _______,_______,C(KC_W),_______,_______,_______,
                                      _______,_______,                         _______,_______,
                                      _______,_______,                         _______,_______,
                                      _______,_______,                         _______,_______,
@@ -98,9 +111,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      KC_TAB,  KC_I,  KC_Q,  KC_W,  KC_E,  KC_R,                          _______,  _______,  _______,  _______,  _______,  _______,  
      KC_LALT,  KC_M,  KC_A,  KC_S,  KC_D,  KC_F,                          _______,  _______,  _______,  _______,  _______,  _______,  
      XXXXXXX,  KC_Z,  KC_X,  KC_C,  KC_V,  KC_B,                          _______,  _______,  _______,  _______,  _______,  _______,  
-                                             _______,_______,            _______,_______,
+                                             KC_COMM,KC_DOT,            _______,_______,
                                              KC_LSFT,KC_LCTL,            _______,_______,
-                                             KC_SPC,GIG2,            _______,_______,
+                                             GIG3_SPC,GIG2,            _______,_______,
                                              KC_LALT,KC_ENT,            _______,_______
 ),
   [_GAMING2] = LAYOUT_5x6(
@@ -113,8 +126,19 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                              _______,KC_SPC,            _______,_______,
                                              _______,KC_ENT,            _______,_______
 ),
+  [_GAMING3] = LAYOUT_5x6(
+		KC_ESC,KC_F1  , KC_F2  , KC_F3  , KC_F4  , KC_F5,                         DVK,DVK,DVK,DVK,DVK,DVK,
+     XXXXXXX,  KC_F6,  KC_F7,  KC_F8,  KC_F9,  KC_F10,                          _______,  _______,  _______,  _______,  _______,  _______,  
+     XXXXXXX,  KC_F11,  KC_F12,  XXXXXXX,  XXXXXXX,  XXXXXXX,                          _______,  _______,  _______,  _______,  _______,  _______,  
+     XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,                          _______,  _______,  _______,  _______,  _______,  _______,  
+                                             _______,_______,            _______,_______,
+                                             KC_LSFT,KC_LCTL,            _______,_______,
+                                             _______,KC_SPC,            _______,_______,
+                                             _______,KC_ENT,            _______,_______
+),
   };
 
+/*Uncomment to log key input. Use hid_listen.*/
 /* void keyboard_post_init_user(void) { */
 /*   // Customise these values to desired behaviour */
 /*   debug_enable=true; */
