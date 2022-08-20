@@ -19,7 +19,7 @@ extern keymap_config_t keymap_config;
 #define DEV MO(_DEV)
 #define DVK DF(_DVORAK)
 #define SHIFTED MO(_SHIFTED)
-#define MOUSE_L MO(_MOUSE)
+#define MOUSE_L DF(_MOUSE)
 
 #define GIG DF(_GAMING1)
 #define GIG2 MO(_GAMING2)
@@ -28,8 +28,10 @@ extern keymap_config_t keymap_config;
 /* #define RAISE_E LT(_RAISE,KC_E) */
 /* #define RAISE_T LT(_RAISE,KC_T) */
 
+#define GUI_R LGUI_T(KC_R)
 #define GUI_COMM LGUI_T(KC_COMM)
 #define RAISE_SPC LT(_RAISE,KC_SPC)
+#define RAISE_O LT(_MOUSE,KC_O)
 
 #define PRINT_SCREEN LGUI(KC_PSCREEN)
 #define CTL_ESC LCTL_T(KC_ESC)
@@ -47,8 +49,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_DVORAK] = LAYOUT_5x6(
 												 /*KC_DLR , KC_1  , KC_2  , KC_3  , KC_4  , KC_5  ,                         KC_6  , KC_7  , KC_8  , KC_9  , KC_0  ,KC_EXLM,*/ 
 		KC_DLR, KC_PLUS  , KC_LBRC  , KC_LCBR  , KC_LPRN  , KC_AMPR  ,             KC_EQL  , KC_RPRN  , KC_RCBR  , KC_RBRC  , KC_ASTR  ,KC_EXLM,
-		KC_TAB , KC_SCLN  , GUI_COMM  , KC_DOT  , KC_P  , KC_Y  ,                  KC_F  , KC_G  , KC_C  , KC_R  , KC_L  ,KC_SLASH,
-    KC_LSFT, KC_A  , KC_O  , KC_E  , KC_U  , KC_I  ,                         KC_D  , KC_H  , KC_T  , KC_N  ,KC_S, KC_MINS,
+		KC_TAB , KC_SCLN  , GUI_COMM  , KC_DOT  , KC_P  , KC_Y  ,                  KC_F  , KC_G  , KC_C  , GUI_R  , KC_L  ,KC_SLASH,
+    KC_LSFT, KC_A  , RAISE_O  , KC_E  , KC_U  , KC_I  ,                         KC_D  , KC_H  , KC_T  , KC_N  ,KC_S, KC_MINS,
     DEV, KC_QUOTE  , KC_Q  , KC_J  , KC_K  , KC_X  ,                         KC_B  , KC_M  ,KC_W,KC_V ,KC_Z,KC_DEL,
 														KC_NUBS,KC_GRV,                                                       KC_NUHS, S(KC_QUOT),
 																				ALT_BSPC,RAISE_SPC,                        SHIFTED, XXXXXXX,
@@ -69,17 +71,17 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      KC_F12 , KC_F1 , KC_F2 , KC_F3 , KC_F4 , KC_F5 ,                         KC_F6  , KC_F7 , KC_F8 , KC_F9 ,KC_F10 ,KC_F11 ,
      XXXXXXX,XXXXXXX,KC_HOME,KC_UP,KC_END,XXXXXXX,                         PRINT_SCREEN,XXXXXXX,KC_BSPC,XXXXXXX,XXXXXXX,XXXXXXX,
 		XXXXXXX,XXXXXXX,KC_LEFT,KC_DOWN,KC_RGHT,XXXXXXX,                         KC_TAB,XXXXXXX,KC_ENT,XXXXXXX,XXXXXXX,XXXXXXX,
-     RESET,XXXXXXX,KC_PGUP,KC_ENT,KC_PGDN,XXXXXXX,                         XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,
+     XXXXXXX,XXXXXXX,KC_PGUP,KC_ENT,KC_PGDN,XXXXXXX,                         XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,RESET,
 																		_______,_______,                         KC_INS,_______,
                                      _______,_______,                         _______,_______,
                                      _______,_______,                         _______,_______,
                                      _______,_______,                         _______,_______
   ),
   [_MOUSE] = LAYOUT_5x6(
-     _______,_______,_______,_______,_______,_______,                         _______,_______,_______,_______,_______,_______,
+     _______,_______,_______,_______,_______,_______,                         DVK,DVK,DVK,DVK,DVK,DVK,
      _______,_______,_______,KC_WH_U,KC_BTN3,_______,                         _______,KC_BTN4,KC_BTN5,_______,_______,_______,
      _______,_______,_______,KC_WH_D,KC_BTN1,KC_BTN2,                         _______,C(KC_PGUP),C(KC_PGDN),_______,_______,_______,
-     _______,_______,_______,KC_WH_L,KC_WH_R,_______,                         _______,_______,C(KC_W),_______,_______,_______,
+     _______,_______,_______,KC_WH_L,KC_WH_R,_______,                         _______,_______,G(KC_W),_______,_______,_______,
                                      _______,_______,                         _______,_______,
                                      _______,_______,                         _______,_______,
                                      _______,_______,                         _______,_______,
@@ -118,8 +120,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 ),
   [_GAMING2] = LAYOUT_5x6(
 		KC_ESC,KC_6  , KC_7  , KC_8  , KC_9  , KC_0  ,                         DVK,DVK,DVK,DVK,DVK,DVK,
-     XXXXXXX,  KC_Y,  KC_U,  KC_G,  KC_O,  KC_P,                          _______,  _______,  _______,  _______,  _______,  _______,  
-     XXXXXXX,  KC_H,  KC_J,  KC_K,  KC_T,  KC_DOT,                          _______,  _______,  _______,  _______,  _______,  _______,  
+     XXXXXXX,  KC_T,  KC_Y,  KC_U,  KC_O,  KC_P,                          _______,  _______,  _______,  _______,  _______,  _______,  
+     XXXXXXX,  KC_G,  KC_H,  KC_J,  KC_K,  KC_L,                          _______,  _______,  _______,  _______,  _______,  _______,  
      XXXXXXX,  KC_N,  KC_M,  KC_L,  KC_ENT,  KC_ESC,                          _______,  _______,  _______,  _______,  _______,  _______,  
                                              _______,_______,            _______,_______,
                                              KC_LSFT,KC_LCTL,            _______,_______,
