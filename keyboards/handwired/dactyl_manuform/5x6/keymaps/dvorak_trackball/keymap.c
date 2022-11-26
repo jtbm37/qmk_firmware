@@ -81,7 +81,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      _______,_______,_______,_______,_______,_______,                         DVK,DVK,DVK,DVK,DVK,DVK,
      _______,_______,_______,KC_WH_U,KC_BTN3,_______,                         _______,KC_BTN4,KC_BTN5,_______,_______,_______,
      _______,_______,_______,KC_WH_D,KC_BTN1,KC_BTN2,                         _______,C(KC_PGUP),C(KC_PGDN),_______,_______,_______,
-     _______,_______,_______,KC_WH_L,KC_WH_R,_______,                         _______,_______,G(KC_W),_______,_______,_______,
+     _______,_______,_______,KC_WH_L,KC_WH_R,_______,                         _______,_______,G(KC_W),_______,_______,DVK,
                                      _______,_______,                         _______,_______,
                                      _______,_______,                         _______,_______,
                                      _______,_______,                         _______,_______,
@@ -140,6 +140,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 ),
   };
 
+uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case LCTL_T(KC_ESC):
+            return 150;
+        default:
+            return TAPPING_TERM;
+    }
+}
 /*Uncomment to log key input. Use hid_listen.*/
 /* void keyboard_post_init_user(void) { */
 /*   // Customise these values to desired behaviour */

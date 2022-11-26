@@ -20,7 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define USE_SERIAL
 
 #undef TAPPING_TERM
-#define TAPPING_TERM 180
+#define TAPPING_TERM 250
 
 #define IGNORE_MOD_TAP_INTERRUPT
 #define MASTER_RIGHT
@@ -33,6 +33,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define PMW3360_CS_PIN F7
 #define POINTING_DEVICE_INVERT_X
 
+#define TAPPING_TERM_PER_KEY
 //#define RETRO_TAPPING
 //#define PERMISSIVE_HOLD
 //#define MASTER_RIGHT
