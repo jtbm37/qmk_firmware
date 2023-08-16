@@ -31,6 +31,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define MATRIX_ROW_PINS { B7, D5, C7, F1, F0, B6 }
 
 //#define PMW3360_CS_PIN F7
+#define PMW3360_CPI 3500
 #define POINTING_DEVICE_CS_PIN F7
 #define POINTING_DEVICE_INVERT_X
 

@@ -140,6 +140,12 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
             return TAPPING_TERM;
     }
 }
+
+void pointing_device_init_kb(void) {
+#ifdef PMW3360_CPI
+    pointing_device_set_cpi(PMW3360_CPI);
+#endif
+}
 /*Uncomment to log key input. Use hid_listen.*/
 /* void keyboard_post_init_user(void) { */
 /*   // Customise these values to desired behaviour */
