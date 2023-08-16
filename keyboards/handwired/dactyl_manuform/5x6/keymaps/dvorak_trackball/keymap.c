@@ -33,17 +33,9 @@ extern keymap_config_t keymap_config;
 #define RAISE_SPC LT(_RAISE,KC_SPC)
 #define RAISE_O LT(_MOUSE,KC_O)
 
-#define PRINT_SCREEN LGUI(KC_PSCREEN)
+#define PRINT_SCREEN LGUI(KC_PSCR)
 #define CTL_ESC LCTL_T(KC_ESC)
 #define ALT_BSPC LALT_T(KC_BSPC)
-/* #define COMBO_COUNT 0 */
-
-// Combo
-/* const uint16_t PROGMEM h_t_combo[] = {KC_H, KC_T, COMBO_END}; */
-/* combo_t key_combos[COMBO_COUNT] = { */
-/* 		COMBO(h_t_combo, KC_ESC) */
-/*     //COMBO(test_combo2, LCTL(KC_Z)), // keycodes with modifiers are possible too! */
-/* }; */
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_DVORAK] = LAYOUT_5x6(
@@ -71,7 +63,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      KC_F12 , KC_F1 , KC_F2 , KC_F3 , KC_F4 , KC_F5 ,                         KC_F6  , KC_F7 , KC_F8 , KC_F9 ,KC_F10 ,KC_F11 ,
      XXXXXXX,XXXXXXX,KC_HOME,KC_UP,KC_END,XXXXXXX,                         PRINT_SCREEN,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,
 		 XXXXXXX,XXXXXXX,KC_LEFT,KC_DOWN,KC_RGHT,XXXXXXX,                         KC_TAB,XXXXXXX,KC_ENT,A(KC_SPC),XXXXXXX,XXXXXXX,
-     XXXXXXX,XXXXXXX,KC_PGUP,KC_ENT,KC_PGDN,XXXXXXX,                         XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,RESET,
+     XXXXXXX,XXXXXXX,KC_PGUP,KC_ENT,KC_PGDN,XXXXXXX,                         XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,QK_BOOT,
 																		_______,_______,                         KC_INS,_______,
                                      _______,_______,                         _______,_______,
                                      _______,_______,                         _______,_______,

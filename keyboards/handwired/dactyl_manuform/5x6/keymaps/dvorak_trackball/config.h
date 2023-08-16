@@ -22,15 +22,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #undef TAPPING_TERM
 #define TAPPING_TERM 250
 
-#define IGNORE_MOD_TAP_INTERRUPT
 #define MASTER_RIGHT
+#define SPLIT_POINTING_ENABLE
 #define POINTING_DEVICE_RIGHT
 
 
 #undef MATRIX_ROW_PINS
 #define MATRIX_ROW_PINS { B7, D5, C7, F1, F0, B6 }
 
-#define PMW3360_CS_PIN F7
+//#define PMW3360_CS_PIN F7
+#define POINTING_DEVICE_CS_PIN F7
 #define POINTING_DEVICE_INVERT_X
 
 #define TAPPING_TERM_PER_KEY
