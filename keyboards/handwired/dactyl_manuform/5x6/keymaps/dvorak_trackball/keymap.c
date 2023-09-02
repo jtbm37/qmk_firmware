@@ -19,7 +19,7 @@ extern keymap_config_t keymap_config;
 #define DEV MO(_DEV)
 #define DVK DF(_DVORAK)
 #define SHIFTED MO(_SHIFTED)
-#define MOUSE_L DF(_MOUSE)
+#define MOUSE_L TG(_MOUSE)
 
 #define GIG DF(_GAMING1)
 #define GIG2 MO(_GAMING2)
@@ -37,11 +37,99 @@ extern keymap_config_t keymap_config;
 #define CTL_ESC LCTL_T(KC_ESC)
 #define ALT_BSPC LALT_T(KC_BSPC)
 
+// Define a type for as many tap dance states as you need
+typedef enum {
+    TD_NONE,
+    TD_UNKNOWN,
+    TD_SINGLE_TAP,
+    TD_SINGLE_HOLD,
+    TD_DOUBLE_TAP
+} td_state_t;
+
+typedef struct {
+    bool is_press_action;
+    td_state_t state;
+} td_tap_t;
+
+enum {
+    SLASH_LAYR, // Our custom tap dance key; add any other tap dance keys to this enum 
+};
+
+// Declare the functions to be used with your tap dance key(s)
+
+// Function associated with all tap dances
+td_state_t cur_dance(tap_dance_state_t *state);
+
+// Functions associated with individual tap dances
+void ql_finished(tap_dance_state_t *state, void *user_data);
+void ql_reset(tap_dance_state_t *state, void *user_data);
+
+
+
+enum custom_keycodes {
+    DRAG_SCROLL = SAFE_RANGE,
+};
+
+bool set_scrolling = false;
+
+// Modify these values to adjust the scrolling speed
+#define SCROLL_DIVISOR_H 100.0
+#define SCROLL_DIVISOR_V 100.0
+
+// Variables to store accumulated scroll values
+float scroll_accumulated_h = 0;
+float scroll_accumulated_v = 0;
+
+// Function to handle mouse reports and perform drag scrolling
+report_mouse_t pointing_device_task_user(report_mouse_t mouse_report) {
+    // Check if drag scrolling is active
+    if (set_scrolling) {
+        // Calculate and accumulate scroll values based on mouse movement and divisors
+        scroll_accumulated_h += (float)mouse_report.x / SCROLL_DIVISOR_H;
+        scroll_accumulated_v += (float)mouse_report.y / SCROLL_DIVISOR_V;
+
+        // Assign integer parts of accumulated scroll values to the mouse report
+        mouse_report.h = (int8_t)scroll_accumulated_h;
+        mouse_report.v = (int8_t)scroll_accumulated_v;
+
+        // Update accumulated scroll values by subtracting the integer parts
+        scroll_accumulated_h -= (int8_t)scroll_accumulated_h;
+        scroll_accumulated_v -= (int8_t)scroll_accumulated_v;
+
+        // Clear the X and Y values of the mouse report
+        mouse_report.x = 0;
+        mouse_report.y = 0;
+    }
+    return mouse_report;
+}
+
+// Function to handle key events and enable/disable drag scrolling
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case DRAG_SCROLL:
+            // Toggle set_scrolling when DRAG_SCROLL key is pressed or released
+            set_scrolling = record->event.pressed;
+            break;
+        default:
+            break;
+    }
+    return true;
+}
+
+// Function to handle layer changes and disable drag scrolling when not in AUTO_MOUSE_DEFAULT_LAYER
+layer_state_t layer_state_set_user(layer_state_t state) {
+    // Disable set_scrolling if the current layer is not the AUTO_MOUSE_DEFAULT_LAYER
+    if (get_highest_layer(state) != _MOUSE) {
+        set_scrolling = false;
+    }
+    return state;
+}
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_DVORAK] = LAYOUT_5x6(
 												 /*KC_DLR , KC_1  , KC_2  , KC_3  , KC_4  , KC_5  ,                         KC_6  , KC_7  , KC_8  , KC_9  , KC_0  ,KC_EXLM,*/ 
 		KC_DLR, KC_PLUS  , KC_LBRC  , KC_LCBR  , KC_LPRN  , KC_AMPR  ,             KC_EQL  , KC_RPRN  , KC_RCBR  , KC_RBRC  , KC_ASTR  ,KC_EXLM,
-		KC_TAB , KC_SCLN  , GUI_COMM  , KC_DOT  , KC_P  , KC_Y  ,                  KC_F  , KC_G  , KC_C  , GUI_R  , KC_L  ,KC_SLASH,
+		KC_TAB , KC_SCLN  , GUI_COMM  , KC_DOT  , KC_P  , KC_Y  ,                  KC_F  , KC_G  , KC_C  , GUI_R  , KC_L  ,TD(SLASH_LAYR),
     KC_LSFT, KC_A  , RAISE_O  , KC_E  , KC_U  , KC_I  ,                         KC_D  , KC_H  , KC_T  , KC_N  ,KC_S, KC_MINS,
     DEV, KC_QUOTE  , KC_Q  , KC_J  , KC_K  , KC_X  ,                         KC_B  , KC_M  ,KC_W,KC_V ,KC_Z,KC_DEL,
 														KC_NUBS,KC_GRV,                                                       KC_NUHS, S(KC_QUOT),
@@ -69,17 +157,27 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                      _______,_______,                         _______,_______,
                                      _______,_______,                         _______,_______
   ),
+  /* [_MOUSE] = LAYOUT_5x6( */
+  /*    _______,_______,_______,_______,_______,_______,                         DVK,DVK,DVK,DVK,DVK,DVK, */
+	/* 											_______,_______,_______,KC_WH_U,KC_BTN3,_______,                         XXXXXXX,G(KC_LBRC),G(KC_RBRC),XXXXXXX,XXXXXXX,XXXXXXX, */
+  /*    _______,_______,_______,KC_WH_D,KC_BTN1,KC_BTN2,                         G(KC_C),C(KC_PGUP),C(KC_PGDN),XXXXXXX,XXXXXXX,XXXXXXX, */
+  /*    _______,_______,_______,KC_WH_L,KC_WH_R,_______,                         G(KC_V),_______,G(KC_W),_______,_______,DVK, */
+  /*                                    _______,_______,                         _______,_______, */
+  /*                                    _______,KC_LSFT,                         _______,_______, */
+  /*                                    DVK,_______,                         _______,_______, */
+  /*                                    _______,_______,                         _______,_______ */
+  /* ), */
+
   [_MOUSE] = LAYOUT_5x6(
-     _______,_______,_______,_______,_______,_______,                         DVK,DVK,DVK,DVK,DVK,DVK,
-												_______,_______,_______,KC_WH_U,KC_BTN3,_______,                         XXXXXXX,G(KC_LBRC),G(KC_RBRC),XXXXXXX,XXXXXXX,XXXXXXX,
-     _______,_______,_______,KC_WH_D,KC_BTN1,KC_BTN2,                         G(KC_C),C(KC_PGUP),C(KC_PGDN),XXXXXXX,XXXXXXX,XXXXXXX,
-     _______,_______,_______,KC_WH_L,KC_WH_R,_______,                         G(KC_V),_______,G(KC_W),_______,_______,DVK,
+												_______,_______,_______,_______,_______,_______,                         DVK,DVK,DVK,DVK,DVK,DVK,
+												_______,_______,_______,KC_WH_U,KC_BTN3,_______,                         DRAG_SCROLL,G(KC_LBRC),G(KC_RBRC),XXXXXXX,XXXXXXX,XXXXXXX,
+												_______,_______,_______,KC_WH_D,KC_BTN1,KC_BTN2,                         G(KC_C),KC_BTN1,KC_BTN2,KC_BTN3,XXXXXXX,XXXXXXX,
+												_______,_______,_______,KC_WH_L,KC_WH_R,_______,                         G(KC_V),C(KC_PGUP),C(KC_PGDN),XXXXXXX,XXXXXXX,G(KC_W),
                                      _______,_______,                         _______,_______,
                                      _______,KC_LSFT,                         _______,_______,
-                                     DVK,_______,                         _______,_______,
+																				DVK,_______,                         _______,_______,
                                      _______,_______,                         _______,_______
   ),
-
   [_OSX] = LAYOUT_5x6(
 		_______,_______,_______,_______,_______,_______,                         _______,_______,_______,_______,_______,_______,
 		_______,_______,_______,S(KC_UP),_______,_______,                         _______,_______,_______,_______,_______,_______,
@@ -134,6 +232,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
+        case QK_TAP_DANCE ... QK_TAP_DANCE_MAX:
+            return 275;
         case LCTL_T(KC_ESC):
             return 150;
         default:
@@ -146,6 +246,72 @@ void pointing_device_init_kb(void) {
     pointing_device_set_cpi(PMW3360_CPI);
 #endif
 }
+
+// Determine the current tap dance state
+td_state_t cur_dance(tap_dance_state_t *state) {
+    if (state->count == 1) {
+        if (!state->pressed) return TD_SINGLE_TAP;
+        else return TD_SINGLE_HOLD;
+    } else if (state->count == 2) return TD_DOUBLE_TAP;
+    else return TD_UNKNOWN;
+}
+
+// Initialize tap structure associated with example tap dance key
+static td_tap_t ql_tap_state = {
+    .is_press_action = true,
+    .state = TD_NONE
+};
+
+// Functions that control what our tap dance key does
+void ql_finished(tap_dance_state_t *state, void *user_data) {
+    ql_tap_state.state = cur_dance(state);
+    switch (ql_tap_state.state) {
+        case TD_SINGLE_TAP:
+            tap_code(KC_SLASH);
+            break;
+        /* case TD_SINGLE_HOLD: */
+        /*     layer_on(_MY_LAYER); */
+        /*     break; */
+        case TD_DOUBLE_TAP:
+            // Check to see if the layer is already set
+            if (layer_state_is(_MOUSE)) {
+                // If already set, then switch it off
+                layer_off(_MOUSE);
+            } else {
+                // If not already set, then switch the layer on
+                layer_on(_MOUSE);
+            }
+            break;
+        default:
+            break;
+    }
+}
+
+void ql_reset(tap_dance_state_t *state, void *user_data) {
+    // If the key was held down and now is released then switch off the layer
+    if (ql_tap_state.state == TD_SINGLE_HOLD) {
+        layer_off(_MOUSE);
+    }
+    ql_tap_state.state = TD_NONE;
+}
+
+// Associate our tap dance key with its functionality
+tap_dance_action_t tap_dance_actions[] = {
+    [SLASH_LAYR] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, ql_finished, ql_reset)
+};
+
+// Set a long-ish tapping term for tap-dance keys
+/* uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) { */
+/*     switch (keycode) { */
+/*         case QK_TAP_DANCE ... QK_TAP_DANCE_MAX: */
+/*             return 275; */
+/*         default: */
+/*             return TAPPING_TERM; */
+/*     } */
+/* } */
+
+
+
 /*Uncomment to log key input. Use hid_listen.*/
 /* void keyboard_post_init_user(void) { */
 /*   // Customise these values to desired behaviour */
